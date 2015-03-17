@@ -26,7 +26,7 @@ public class WebUI implements Runnable {
 		this.main = main;
 
 		socket = new ServerSocket(port);
-		Logger.log("Started webUI on port: " + port);
+		Logger.log("Started server on port: " + port);
 
 		pageManager = new PageManager(main);
 
@@ -38,7 +38,7 @@ public class WebUI implements Runnable {
 		while (true) {
 			try {
 				Socket clientSocket = socket.accept();
-				Logger.log("Web Socket created " + clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort());
+				if (main.getConfig().isLogConnect()){Logger.log("Web Socket created " + clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort());}
 				Thread client = new Thread(new WebClient(clientSocket, main), "WebClient");
 				client.start();
 			} catch (IOException e) {
