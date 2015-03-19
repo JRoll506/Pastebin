@@ -81,9 +81,9 @@ public class WebUI implements Runnable {
 		File file = new File("data/" + data + ".txt");
 		if (file.exists()) {
 			out.print("HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n");
-			out.println("<html>\n<head>\n<title>"+ data +"</title>\n</head>\n<body>\n<pre style=\"word-wrap: break-word; white-space: pre-wrap;\">");
+			out.println(read("Paste-Header.txt"));
 			out.print(read("data/" + data + ".txt").substring(1).replace("<", "&#60;").replace(">", "&#62;"));
-			out.println("</pre>\n</body>\n</html>");
+			out.println(read("Paste-Footer.txt"));
 			return;
 		}
 
