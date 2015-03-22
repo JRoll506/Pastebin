@@ -26,7 +26,7 @@ public class WebUI implements Runnable {
 		this.main = main;
 
 		socket = new ServerSocket(port);
-		Logger.log("Started webUI on port: " + port);
+		Logger.log("Started server on port: " + port);
 
 		pageManager = new PageManager(main);
 
@@ -38,7 +38,7 @@ public class WebUI implements Runnable {
 		while (true) {
 			try {
 				Socket clientSocket = socket.accept();
-				Logger.log("Web Socket created " + clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort());
+				if (main.getConfig().isLogConnect()){Logger.log("Web Socket created " + clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort());}
 				Thread client = new Thread(new WebClient(clientSocket, main), "WebClient");
 				client.start();
 			} catch (IOException e) {
@@ -81,9 +81,9 @@ public class WebUI implements Runnable {
 		File file = new File("data/" + data + ".txt");
 		if (file.exists()) {
 			out.print("HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n");
-			out.println("<html>\n<head>\n<title>"+ data +"</title>\n</head>\n<body>\n<p>");
-			out.print(read("data/" + data + ".txt").substring(1).replace("\n", "<br>"));
-			out.println("</p>\n</body>\n</html>");
+			out.println(read("Paste-Header.txt"));
+			out.print(read("data/" + data + ".txt").substring(1).replace("<", "&#60;").replace(">", "&#62;"));
+			out.println(read("Paste-Footer.txt"));
 			return;
 		}
 
